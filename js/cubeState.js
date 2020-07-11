@@ -1,0 +1,8 @@
+export const CUBE_STATE = [
+    0xffa500,
+    0xff0000,
+    0xffff00,
+    0xffffff,
+    0x0000ff,
+    0x00ff00
+];

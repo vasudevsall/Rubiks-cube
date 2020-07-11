@@ -1,0 +1,14 @@
+body {
+    padding: 0;
+    margin: 0;
+}
+
+#canvas-div {
+    position: relative;
+    border: 2px solid #676767;
+    width: 800px;
+    height: 500px;
+    display: block;
+    margin: 0 auto;
+    top: 50px;
+}
