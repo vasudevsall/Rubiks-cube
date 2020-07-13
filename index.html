@@ -9,103 +9,94 @@
 <body>
     <div id="canvas-div">
     </div>
-    <ul id="info-div">
-        <li>
-            <label class="Icon">f</label>
-            <label>=></label>
-            <label class="name">Front</label>
-        </li>
-        <li>
-            <label class="Icon">b</label>
-            <label>=></label>
-            <label class="name">Back</label>
-        </li>
-        <li>
-            <label class="Icon">r</label>
-            <label>=></label>
-            <label class="name">Right</label>
-        </li>
-        <li>
-            <label class="Icon">l</label>
-            <label>=></label>
-            <label class="name">Left</label>
-        </li>
-        <li>
-            <label class="Icon">u</label>
-            <label>=></label>
-            <label class="name">Top</label>
-        </li>
-        <li>
-            <label class="Icon">d</label>
-            <label>=></label>
-            <label class="name">Bottom</label>
-        </li>
-        <li>
-            <label class="Icon">F</label>
-            <label>=></label>
-            <label class="name">Front Prime</label>
-        </li>
-        <li>
-            <label class="Icon">B</label>
-            <label>=></label>
-            <label class="name">Back Prime</label>
-        </li>
-        <li>
-            <label class="Icon">R</label>
-            <label>=></label>
-            <label class="name">Right Prime</label>
-        </li>
-        <li>
-            <label class="Icon">L</label>
-            <label>=></label>
-            <label class="name">Left Prime</label>
-        </li>
-        <li>
-            <label class="Icon">U</label>
-            <label>=></label>
-            <label class="name">Top Prime</label>
-        </li>
-        <li>
-            <label class="Icon">D</label>
-            <label>=></label>
-            <label class="name">Bottom Prime</label>
-        </li>
-        <br>
-        <br>
-        <label>Colors-Face Map:</label>
-        <br>
-        <br>
-        <li>
-            <label>Blue</label>
-            <label>=></label>
-            <label>Front</label>
-        </li>
-        <li>
-            <label>Orange</label>
-            <label>=></label>
-            <label>Right</label>
-        </li>
-        <li>
-            <label>Yellow</label>
-            <label>=></label>
-            <label>Top</label>
-        </li>
-        <li>
-            <label>Green</label>
-            <label>=></label>
-            <label>Back</label>
-        </li>
-        <li>
-            <label>Red</label>
-            <label>=></label>
-            <label>Left</label>
-        </li>
-        <li>
-            <label>White</label>
-            <label>=></label>
-            <label>Bottom</label>
-        </li>
-    </ul>
+    <div id="info-div">
+        <h4>Legend:</h4>
+        <table>
+            <tr>
+                <th>Key</th>
+                <th>Face</th>
+            </tr>
+            <tr>
+                <td>f</td>
+                <td>Front</td>
+            </tr>
+            <tr>
+                <td>b</td>
+                <td>Back</td>
+            </tr>
+            <tr>
+                <td>r</td>
+                <td>Right</td>
+            </tr>
+            <tr>
+                <td>l</td>
+                <td>Left</td>
+            </tr>
+            <tr>
+                <td>u</td>
+                <td>Top</td>
+            </tr>
+            <tr>
+                <td>d</td>
+                <td>Bottom</td>
+            </tr>
+            <tr>
+                <td>F</td>
+                <td>Front Prime</td>
+            </tr>
+            <tr>
+                <td>B</td>
+                <td>Back Prime</td>
+            </tr>
+            <tr>
+                <td>R</td>
+                <td>Right Prime</td>
+            </tr>
+            <tr>
+                <td>L</td>
+                <td>Left Prime</td>
+            </tr>
+            <tr>
+                <td>U</td>
+                <td>Top Prime</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>Bottom Prime</td>
+            </tr>
+        </table>
+        <h4>Colors-Face Map:</h4>
+        <table>
+            <tr>
+                <th>Color</th>
+                <th>Face</th>
+            </tr>
+            <tr>
+                <td>Blue</td>
+                <td>Front</td>
+            </tr>
+            <tr>
+                <td>Orange</td>
+                <td>Right</td>
+            </tr>
+            <tr>
+                <td>Yellow</td>
+                <td>Top</td>
+            </tr>
+            <tr>
+                <td>Green</td>
+                <td>Back</td>
+            </tr>
+            <tr>
+                <td>Red</td>
+                <td>Left</td>
+            </tr>
+            <tr>
+                <td>White</td>
+                <td>Bottom</td>
+            </tr>
+        </table>
+    </div>
     <div id="queue-div">
         <div id="queue-container">
             <div>Current Queue:</div>
@@ -115,6 +106,20 @@
     <div id="button-div">
         <button id="shuffle-button">Shuffle</button>
         <button id="reset-button">Reset</button>
+    </div>
+    <div id="bottom-button-div">
+        <button class="bottom-button" value="102">F</button>
+        <button class="bottom-button" value="98">B</button>
+        <button class="bottom-button" value="108">L</button>
+        <button class="bottom-button" value="114">R</button>
+        <button class="bottom-button" value="117">U</button>
+        <button class="bottom-button" value="100">D</button>
+        <button class="bottom-button" value="70">F'</button>
+        <button class="bottom-button" value="66">B'</button>
+        <button class="bottom-button" value="76">L'</button>
+        <button class="bottom-button" value="82">R'</button>
+        <button class="bottom-button" value="85">U'</button>
+        <button class="bottom-button" value="68">D'</button>
     </div>
     <script src="./node_modules/three/build/three.min.js"></script>
     <script type="module" src="js/index.js"></script>

@@ -278,14 +278,16 @@ function giveFaceColors() {
 }
 
 /* Function for handling Key Presses */
-function windowKeyPress(event) {
+function windowKeyPress(event, btn = false) {
     // $ if debug is true
     if(debug) {
         console.log(event.which);
     }
 
+    var toSwitch = (btn)? parseInt(event.target.value, 10) : event.which;
+
     var toPush;
-    switch(event.which) {
+    switch(toSwitch) {
         case 66:    // back Prime (Shift + b = B)
             toPush = -6;
             break;
@@ -327,7 +329,6 @@ function windowKeyPress(event) {
     }
 
     if(toPush != 0){
-        console.log('true');
         rotationQueue.push(toPush);
     }
     if(debug) {
@@ -427,6 +428,14 @@ function constructor(divId) {
     /* Add event listener to window */
     window.addEventListener('keypress', windowKeyPress);
     window.addEventListener('resize', resizeWindow);
+
+    /* Giving event listeners to all bottom buttons */
+    var buttons = document.getElementsByClassName('bottom-button');
+    for(var i=0; i<buttons.length; i++){
+        buttons[i].addEventListener('click', (e) => {
+            windowKeyPress(e, true);
+        });
+    }
 
     /* Add event listeners to buttons */
     document.getElementById('shuffle-button').addEventListener('click', shuffleCube);
