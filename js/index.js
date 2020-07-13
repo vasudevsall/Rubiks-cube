@@ -8,8 +8,8 @@ var scene, camera, renderer;
 var controls;
 
 var cubeGeometry, cubeMaterial, cubeBorderGeometry ,cube, cubeBorder;
-var cubeArray = new Array();
-var cubeBorderArray = new Array();
+var cubeArray = [];
+var cubeBorderArray = [];
 var cubeState = CUBE_STATE;
 
 var cubeGroup;
@@ -17,12 +17,14 @@ var vectorX, vectorY, vectorZ;
 
 var frontArr, backArr, rightArr, leftArr, topArr, downArr;
 
-var toRotate = 0; // 0 -> no rotation, 1 -> right, 2-> left, 3-> top, 4-> bottom, 5-> front, 6-> back
-
 /* This variable helps debug */
 var debug = true;
 
-var doRotation = true, rotationVar = 0, rotationVector, rotationCoeff;
+var doRotation = false, rotationVar = 0, rotationVector, rotationCoeff;
+
+var rotationQueue = [1, 5, -5, -1];//[1, 5, -5, -1];
+// 0 -> no rotation, 1 -> right, 2-> left, 3-> top, 4-> bottom, 5-> front, 6-> back
+// -1 -> rightPrime, -2-> leftPrime, -3->topPrime, etc.
 
 function createCube() {
     /* Create cube */
@@ -98,24 +100,21 @@ function rotate(sideArr, rev = true) {
     return retArray;
 }
 
-function clearGroup() {
-    for(var i = cubeGroup.children.length -1; i>=0; i++) {
-        cubeGroup.remove(cubeGroup.children[i]);
-    }
-}
-
 function rightRotation(rev = false) {
-    /* Clear the group */
-    clearGroup();
+
+    /* Initialize a new Group */
+    cubeGroup = new THREE.Group();
 
     var finalArr;
     var tempState = [];
-    cubeGroup
+    
+    finalArr = rotate(rightArr);
+
     for (var i=0; i<cubeState.length; i++){
         tempState[i] = cubeState[i].slice();
     }
     if(!rev) {
-        finalArr = rotate(rightArr, false);
+        finalArr.reverse();
         for(var i = 0; i<finalArr.length; i++) {
             tempState[rightArr[i]][0] = cubeState[finalArr[i]][0];
             tempState[rightArr[i]][1] = cubeState[finalArr[i]][1];
@@ -128,12 +127,80 @@ function rightRotation(rev = false) {
             cubeGroup.add(cubeArray[rightArr[i]]);
             cubeGroup.add(cubeBorderArray[rightArr[i]]);
         }
+        rotationCoeff = -0.1;
+    } else {
+        for(var i = 0; i<finalArr.length; i++) {
+            tempState[rightArr[i]][0] = cubeState[finalArr[i]][0];
+            tempState[rightArr[i]][1] = cubeState[finalArr[i]][1];
+            tempState[rightArr[i]][2] = cubeState[finalArr[i]][5];
+            tempState[rightArr[i]][3] = cubeState[finalArr[i]][4];
+            tempState[rightArr[i]][4] = cubeState[finalArr[i]][2];
+            tempState[rightArr[i]][5] = cubeState[finalArr[i]][3];
+
+            /* Add to group */
+            cubeGroup.add(cubeArray[rightArr[i]]);
+            cubeGroup.add(cubeBorderArray[rightArr[i]]);
+        }
+        rotationCoeff = 0.1;
     }
 
 
     rotationVector = vectorX;
-    rotationCoeff = -0.1;
     cubeState = tempState;
+    scene.add(cubeGroup);
+
+    doRotation = true;
+}
+
+function frontRotation(rev = false) {
+
+    /* Initialize a new Group */
+    cubeGroup = new THREE.Group();
+
+    var finalArr;
+    var tempState = [];
+    
+    finalArr = rotate(frontArr);
+
+    for (var i=0; i<cubeState.length; i++){
+        tempState[i] = cubeState[i].slice();
+    }
+    if(!rev) {
+        for(var i = 0; i<finalArr.length; i++) {
+            tempState[frontArr[i]][0] = cubeState[finalArr[i]][2];
+            tempState[frontArr[i]][1] = cubeState[finalArr[i]][3];
+            tempState[frontArr[i]][2] = cubeState[finalArr[i]][1];
+            tempState[frontArr[i]][3] = cubeState[finalArr[i]][0];
+            tempState[frontArr[i]][4] = cubeState[finalArr[i]][4];
+            tempState[frontArr[i]][5] = cubeState[finalArr[i]][5];
+
+            /* Add to group */
+            cubeGroup.add(cubeArray[frontArr[i]]);
+            cubeGroup.add(cubeBorderArray[frontArr[i]]);
+        }
+        rotationCoeff = -0.1;
+    } else {
+        finalArr.reverse();
+        for(var i = 0; i<finalArr.length; i++) {
+            tempState[frontArr[i]][0] = cubeState[finalArr[i]][3];
+            tempState[frontArr[i]][1] = cubeState[finalArr[i]][2];
+            tempState[frontArr[i]][2] = cubeState[finalArr[i]][0];
+            tempState[frontArr[i]][3] = cubeState[finalArr[i]][1];
+            tempState[frontArr[i]][4] = cubeState[finalArr[i]][4];
+            tempState[frontArr[i]][5] = cubeState[finalArr[i]][5];
+
+            /* Add to group */
+            cubeGroup.add(cubeArray[frontArr[i]]);
+            cubeGroup.add(cubeBorderArray[frontArr[i]]);
+        }
+        rotationCoeff = 0.1;
+    }
+
+
+    rotationVector = vectorZ;
+    cubeState = tempState;
+    scene.add(cubeGroup);
+    doRotation = true;
 }
 
 function giveFaceColors() {
@@ -144,8 +211,6 @@ function giveFaceColors() {
         for(var x=0; x<6; x++) {
             faces[2*x].color.setHex(cubeState[i][x]);
             faces[2*x+1].color.setHex(cubeState[i][x]);
-            // var face = faces[x];
-            // face.color.setHex(0xff0000);
         }
 
         thisCube.geometry.elementsNeedUpdate = true;
@@ -206,7 +271,10 @@ function constructor(divId) {
     /* Create Rubik's cube */
     createCube();
     giveFaceColors();
-    rightRotation();
+
+    /* Give the first rotation */
+    var firstRotation = nextRotation();
+    firstRotation();
 
     // $ Just to help debug the code
     if (debug) {
@@ -222,21 +290,49 @@ function constructor(divId) {
     render();
 }
 
+function nextRotation() {
+    var next = rotationQueue.shift();
+    console.log(next +"\t"+ rotationQueue);
+
+    switch(next) {
+        case -5:
+            return (function(){
+                frontRotation(true);
+            });
+        case -1:
+            return (function(){ 
+                rightRotation(true);
+            });
+        case 1:
+            return rightRotation;
+        case 5:
+            return frontRotation;
+        default:
+            return null;
+    }
+}
+
 function render() {
     requestAnimationFrame(render);
 
+    /* Rotatte the Given face and then perform required actions */
     if(doRotation && rotationVar < (Math.PI/2.0)) {
         rotationVar = rotationVar + 0.1;
         cubeGroup.rotateOnAxis(rotationVector, rotationCoeff);
     } else {
         if(doRotation) {
-            cubeGroup.rotateOnAxis(rotationVector, (1.6));
+            cubeGroup.rotateOnAxis(rotationVector, ((rotationCoeff > 0) ? -1.6: 1.6));
             giveFaceColors();
+            doRotation = false;
+            var nextFunc = nextRotation();
+            if(nextFunc !== null){
+                nextFunc();
+            }
         }
-        doRotation = false;
         rotationVar = 0.0;
     }
 
+    /* Orbit Controls update and rendering camera */
     controls.update();
     renderer.render(scene, camera);
 }
