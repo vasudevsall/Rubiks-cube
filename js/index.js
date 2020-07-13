@@ -50,7 +50,7 @@ function createCube() {
                 scene.add(cube);
 
                 cubeBorderGeometry = new THREE.EdgesGeometry( cube.geometry );
-                cubeBorder = new THREE.LineSegments(cubeBorderGeometry, new THREE.LineBasicMaterial({color: 0x0000, linewidth: 10}));
+                cubeBorder = new THREE.LineSegments(cubeBorderGeometry, new THREE.LineBasicMaterial({color: 0x0000, linewidth: 3}));
                 cubeBorder.position.set(positionX, positionY, positionZ);
                 scene.add(cubeBorder);
 
