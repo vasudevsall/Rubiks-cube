@@ -6,12 +6,16 @@
   "scripts": {
     "start": "npm run lite",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lite": "lite-server"
+    "lite": "lite-server",
+    "clean": "rimraf dist",
+    "build": "npm run clean && copyfiles index.html js/* css/* node_modules/three/build/* node_modules/three/examples/jsm/controls/OrbitControls.js dist"
   },
   "author": "Vasu Dev Sall",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.5.4"
+    "copyfiles": "^2.3.0",
+    "lite-server": "^2.5.4",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
     "three": "^0.118.3"
