@@ -332,7 +332,7 @@ function render() {
         rotationVar = 0.0;
     }
 
-    /* Orbit Controls update and rendering camera */
+    /* Orbit Controls update and rendering camera  */
     controls.update();
     renderer.render(scene, camera);
 }
