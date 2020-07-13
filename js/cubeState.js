@@ -14,7 +14,6 @@ export const CUBE_STATE = [
     // 0x0000ff,    // $ blue   -> front
     // 0x00ff00,    // $ green  -> back
 
-    /*
     // # 0 : (left, bottom, back) [right-> black, left-> red, top-> black, bottom-> white, front-> black, back-> green]
     [black, red, black, white, black, green],
 
@@ -95,8 +94,8 @@ export const CUBE_STATE = [
 
     // # 26: (right, top, front) [orange, black, yellow, black, blue, black]
     [orange, black, yellow, black, blue, black]
-    */
 
+    /*
     [orange, red, yellow, white, blue, green],  //0
     [orange, red, yellow, white, blue, green],  //1
     [orange, red, yellow, white, blue, green],  //2
@@ -123,5 +122,5 @@ export const CUBE_STATE = [
     [orange, red, yellow, white, blue, green],  //23
     [orange, red, yellow, white, blue, green],  //24
     [orange, red, yellow, white, blue, green],  //25
-    [orange, red, yellow, white, blue, green],  //26
+    [orange, red, yellow, white, blue, green],  //26 */
 ];

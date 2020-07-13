@@ -89,3 +89,29 @@ right->top
 left->bottom
 top->left
 bottom->right
+
+f -> 102
+F -> 70
+
+r -> 114
+R -> 82
+
+l -> 108
+L -> 76
+
+u -> 117
+U -> 85
+
+b -> 98
+B -> 66
+
+d -> 100
+D -> 68
+
+
+0- right    -> orange
+1- left     -> red
+2- top      -> yellow
+3- bottom   -> white
+4- front    -> blue
+5- back     -> green

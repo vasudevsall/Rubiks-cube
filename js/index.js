@@ -22,7 +22,7 @@ var debug = true;
 
 var doRotation = false, rotationVar = 0, rotationVector, rotationCoeff;
 
-var rotationQueue = [1, 2, 3, 4, 5, 6, -6, -5, -4, -3, -2, -1];
+var rotationQueue = []; //[1, 2, 3, 4, 5, 6, -6, -5, -4, -3, -2, -1];
 // 0 -> no rotation, 1 -> right, 2-> left, 3-> top, 4-> bottom, 5-> front, 6-> back
 // -1 -> rightPrime, -2-> leftPrime, -3->topPrime, etc.
 
@@ -277,6 +277,64 @@ function giveFaceColors() {
     }
 }
 
+/* Function for handling Key Presses */
+function windowKeyPress(event) {
+    // $ if debug is true
+    if(debug) {
+        console.log(event.which);
+    }
+
+    var toPush;
+    switch(event.which) {
+        case 66:    // back Prime (Shift + b = B)
+            toPush = -6;
+            break;
+        case 68:    // down Prime (Shift + d = D)
+            toPush = -4;
+            break;
+        case 70:    // front Prime (Shift + f = F)
+            toPush = -5;
+            break;
+        case 76:    // left Prime (Shift + l = L)
+            toPush = -2;
+            break;
+        case 82:    // right Prime (Shift + r = R)
+            toPush = -1;
+            break;
+        case 85:    // top Prime (Shift + u = U)
+            toPush = -3;
+            break;
+        case 98:    // back (b)
+            toPush = 6;
+            break;
+        case 100:   // down (d)
+            toPush = 4;
+            break;
+        case 102:   // front (f)
+            toPush = 5;
+            break;
+        case 108:   // left (l)
+            toPush = 2;
+            break;
+        case 114:   // right (r)
+            toPush = 1;
+            break;
+        case 117:   // top (u)
+            toPush = 3;
+            break;
+        default:
+            toPush = 0;
+    }
+
+    if(toPush != 0){
+        console.log('true');
+        rotationQueue.push(toPush);
+    }
+    if(debug) {
+        console.log(rotationQueue);
+    }
+}
+
 function constructor(divId) {
     /* Position to add canvas */
     canvasDiv = document.getElementById(divId);
@@ -332,9 +390,8 @@ function constructor(divId) {
     createCube();
     giveFaceColors();
 
-    /* Give the first rotation */
-    var firstRotation = nextRotation();
-    firstRotation();
+    /* Add event listener to window */
+    window.addEventListener('keypress', windowKeyPress);
 
     // $ Just to help debug the code
     if (debug) {
@@ -352,7 +409,6 @@ function constructor(divId) {
 
 function nextRotation() {
     var next = rotationQueue.shift();
-    console.log(next +"\t"+ rotationQueue);
 
     switch(next) {
         case -6:    // Back Prime
@@ -417,15 +473,14 @@ function render() {
         cubeGroup.rotateOnAxis(rotationVector, rotationCoeff);
     } else {
         if(doRotation) {
-            console.log('end');
             cubeGroup.rotateOnAxis(rotationVector, ((rotationCoeff > 0) ? -1.6: 1.6));
             giveFaceColors();
             doRotation = false;
-            var nextFunc = nextRotation();
+        }
+        var nextFunc = nextRotation();
             if(nextFunc !== null){
                 nextFunc();
             }
-        }
         rotationVar = 0.0;
     }
 
