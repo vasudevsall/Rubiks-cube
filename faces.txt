@@ -1,9 +1,9 @@
-1- right    -> orange
-2- left     -> red
-3- top      -> yellow
-4- bottom   -> white
-5- front    -> blue
-6- back     -> green
+0- right    -> orange
+1- left     -> red
+2- top      -> yellow
+3- bottom   -> white
+4- front    -> blue
+5- back     -> green
 
 
 

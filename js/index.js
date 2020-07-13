@@ -22,7 +22,7 @@ var debug = true;
 
 var doRotation = false, rotationVar = 0, rotationVector, rotationCoeff;
 
-var rotationQueue = [1, 5, 6, -6, -5, -1, 2, -2];
+var rotationQueue = [1, 2, 3, 4, 5, 6, -6, -5, -4, -3, -2, -1];
 // 0 -> no rotation, 1 -> right, 2-> left, 3-> top, 4-> bottom, 5-> front, 6-> back
 // -1 -> rightPrime, -2-> leftPrime, -3->topPrime, etc.
 
@@ -209,6 +209,60 @@ function frontRotation(back, rev) {
     doRotation = true;
 }
 
+/* Function for handling both top and down rotations */
+function topRotation(down, rev) {
+
+    /* Initialize a new Group */
+    cubeGroup = new THREE.Group();
+
+    var finalArr;
+    var tempState = [];
+    
+    var initArr = (down)? downArr:topArr;
+
+    finalArr = rotate(initArr);
+
+    for (var i=0; i<cubeState.length; i++){
+        tempState[i] = cubeState[i].slice();
+    }
+    if((!down && !rev) || (down && rev)) {
+        for(var i = 0; i<finalArr.length; i++) {
+            tempState[initArr[i]][0] = cubeState[finalArr[i]][5];
+            tempState[initArr[i]][1] = cubeState[finalArr[i]][4];
+            tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
+            tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
+            tempState[initArr[i]][4] = cubeState[finalArr[i]][0];
+            tempState[initArr[i]][5] = cubeState[finalArr[i]][1];
+
+            /* Add to group */
+            cubeGroup.add(cubeArray[initArr[i]]);
+            cubeGroup.add(cubeBorderArray[initArr[i]]);
+        }
+        rotationCoeff = -0.1;
+    } else {
+        finalArr.reverse();
+        for(var i = 0; i<finalArr.length; i++) {
+            tempState[initArr[i]][0] = cubeState[finalArr[i]][4];
+            tempState[initArr[i]][1] = cubeState[finalArr[i]][5];
+            tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
+            tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
+            tempState[initArr[i]][4] = cubeState[finalArr[i]][1];
+            tempState[initArr[i]][5] = cubeState[finalArr[i]][0];
+
+            /* Add to group */
+            cubeGroup.add(cubeArray[initArr[i]]);
+            cubeGroup.add(cubeBorderArray[initArr[i]]);
+        }
+        rotationCoeff = 0.1;
+    }
+
+
+    rotationVector = vectorY;
+    cubeState = tempState;
+    scene.add(cubeGroup);
+    doRotation = true;
+}
+
 function giveFaceColors() {
     for(var i=0; i<cubeArray.length; i++) {
         var thisCube = cubeArray[i];
@@ -301,35 +355,51 @@ function nextRotation() {
     console.log(next +"\t"+ rotationQueue);
 
     switch(next) {
-        case -6:
+        case -6:    // Back Prime
             return (function() {
                 frontRotation(true, true);
             });
-        case -5:
+        case -5:    // Front Prime
             return (function(){
                 frontRotation(false, true);
             });
-        case -2:
+        case -4:    // Bottom Prime
+            return (function(){
+                topRotation(true, true);
+            });
+        case -3:    // Top Prime
+            return (function() {
+                topRotation(false, true);
+            });
+        case -2:    // Left Prime
             return (function(){
                 rightRotation(true, true);
             });
-        case -1:
+        case -1:    // Right Prime
             return (function(){ 
                 rightRotation(false, true);
             });
-        case 1:
+        case 1:     // Right
             return (function(){
                 rightRotation(false, false);
             });
-        case 2:
+        case 2:     // Left
             return (function(){
                 rightRotation(true, false);
-            })
-        case 5:
+            });
+        case 3:     // Top
+            return (function(){
+                topRotation(false, false);
+            });
+        case 4:     // Bottom
+            return (function(){
+                topRotation(true, false);
+            });
+        case 5:     // Front
             return (function(){
                 frontRotation(false, false);
             });
-        case 6:
+        case 6:     // Back
             return (function() {
                 frontRotation(true, false);
             });
