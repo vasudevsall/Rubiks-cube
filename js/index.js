@@ -18,7 +18,7 @@ var vectorX, vectorY, vectorZ;
 var frontArr, backArr, rightArr, leftArr, topArr, downArr;
 
 /* This variable helps debug */
-var debug = true;
+var debug = false;
 
 var doRotation = false, rotationVar = 0, rotationVector, rotationCoeff;
 
@@ -335,6 +335,40 @@ function windowKeyPress(event) {
     }
 }
 
+/* When browser window is resized */
+function resizeWindow(){
+    // This function resizes canvas size every time window size if resized
+
+    TH_HEIGHT = parseInt(canvasDivStyle.getPropertyValue("height"), 10);
+    TH_WIDTH = parseInt(canvasDivStyle.getPropertyValue("width"), 10);
+
+    renderer.setSize(TH_WIDTH,TH_HEIGHT);
+    camera.aspect = TH_WIDTH/TH_HEIGHT;
+
+    camera.updateProjectionMatrix();
+}
+
+function shuffleCube() {
+    var min = Math.ceil(-6);
+    var max = Math.floor(6);
+    var count = 0;
+    while(count < 25) {
+        var randNum = Math.floor(Math.random() * (max - min)) + min;
+        if(randNum === 0)
+            continue;
+        rotationQueue.push(randNum);
+        if(debug) {
+            console.log(rotationQueue);
+        }
+        count++;
+    }
+}
+
+function resetCube() {
+    cubeState = CUBE_STATE;
+    giveFaceColors();
+}
+
 function constructor(divId) {
     /* Position to add canvas */
     canvasDiv = document.getElementById(divId);
@@ -345,9 +379,9 @@ function constructor(divId) {
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
-    camera.position.set(-2, 4, 10);
-    renderer = new THREE.WebGLRenderer({antialias: true});
-    renderer.setClearColor(0xf6f6f6);
+    camera.position.set(-3, 4, 10);
+    renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
+    renderer.setClearColor(0x2d383a);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
 
     /* Adding controls to the scene */
@@ -392,6 +426,11 @@ function constructor(divId) {
 
     /* Add event listener to window */
     window.addEventListener('keypress', windowKeyPress);
+    window.addEventListener('resize', resizeWindow);
+
+    /* Add event listeners to buttons */
+    document.getElementById('shuffle-button').addEventListener('click', shuffleCube);
+    document.getElementById('reset-button').addEventListener('click', resetCube);
 
     // $ Just to help debug the code
     if (debug) {

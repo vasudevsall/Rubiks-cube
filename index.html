@@ -3,13 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Three Js - 6</title>
+    <title>Rubik's Cube</title>
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
     <div id="canvas-div">
     </div>
+    <ul id="info-div">
+        <li>
+            <label class="Icon">f</label>
+            <label>=></label>
+            <label class="name">Front</label>
+        </li>
+        <li>
+            <label class="Icon">b</label>
+            <label>=></label>
+            <label class="name">Back</label>
+        </li>
+        <li>
+            <label class="Icon">r</label>
+            <label>=></label>
+            <label class="name">Right</label>
+        </li>
+        <li>
+            <label class="Icon">l</label>
+            <label>=></label>
+            <label class="name">Left</label>
+        </li>
+        <li>
+            <label class="Icon">u</label>
+            <label>=></label>
+            <label class="name">Top</label>
+        </li>
+        <li>
+            <label class="Icon">d</label>
+            <label>=></label>
+            <label class="name">Bottom</label>
+        </li>
+        <li>
+            <label class="Icon">F</label>
+            <label>=></label>
+            <label class="name">Front Prime</label>
+        </li>
+        <li>
+            <label class="Icon">B</label>
+            <label>=></label>
+            <label class="name">Back Prime</label>
+        </li>
+        <li>
+            <label class="Icon">R</label>
+            <label>=></label>
+            <label class="name">Right Prime</label>
+        </li>
+        <li>
+            <label class="Icon">L</label>
+            <label>=></label>
+            <label class="name">Left Prime</label>
+        </li>
+        <li>
+            <label class="Icon">U</label>
+            <label>=></label>
+            <label class="name">Top Prime</label>
+        </li>
+        <li>
+            <label class="Icon">D</label>
+            <label>=></label>
+            <label class="name">Bottom Prime</label>
+        </li>
+        <br>
+        <br>
+        <label>Colors-Face Map:</label>
+        <br>
+        <br>
+        <li>
+            <label>Blue</label>
+            <label>=></label>
+            <label>Front</label>
+        </li>
+        <li>
+            <label>Orange</label>
+            <label>=></label>
+            <label>Right</label>
+        </li>
+        <li>
+            <label>Yellow</label>
+            <label>=></label>
+            <label>Top</label>
+        </li>
+        <li>
+            <label>Green</label>
+            <label>=></label>
+            <label>Back</label>
+        </li>
+        <li>
+            <label>Red</label>
+            <label>=></label>
+            <label>Left</label>
+        </li>
+        <li>
+            <label>White</label>
+            <label>=></label>
+            <label>Bottom</label>
+        </li>
+    </ul>
+    <div id="queue-div">
+        <div id="queue-container">
+            <div>Current Queue:</div>
+            <p id="display-queue"></p>
+        </div>
+    </div>
+    <div id="button-div">
+        <button id="shuffle-button">Shuffle</button>
+        <button id="reset-button">Reset</button>
+    </div>
     <script src="../node_modules/three/build/three.min.js"></script>
+    <script src="../node_modules/three.meshline/src/THREE.MeshLine.js"></script>
     <script type="module" src="js/index.js"></script>
 </body>
 </html>
