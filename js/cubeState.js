@@ -94,33 +94,4 @@ export const CUBE_STATE = [
 
     // # 26: (right, top, front) [orange, black, yellow, black, blue, black]
     [orange, black, yellow, black, blue, black]
-
-    /*
-    [orange, red, yellow, white, blue, green],  //0
-    [orange, red, yellow, white, blue, green],  //1
-    [orange, red, yellow, white, blue, green],  //2
-    [orange, red, yellow, white, blue, green],  //3
-    [orange, red, yellow, white, blue, green],  //4
-    [orange, red, yellow, white, blue, green],  //5
-    [orange, red, yellow, white, blue, green],  //6
-    [orange, red, yellow, white, blue, green],  //7
-    [orange, red, yellow, white, blue, green],  //8
-    [orange, red, yellow, white, blue, green],  //9
-    [orange, red, yellow, white, blue, green],  //10
-    [orange, red, yellow, white, blue, green],  //11
-    [orange, red, yellow, white, blue, green],  //12
-    [orange, red, yellow, white, blue, green],  //13
-    [orange, red, yellow, white, blue, green],  //14
-    [orange, red, yellow, white, blue, green],  //15
-    [orange, red, yellow, white, blue, green],  //16
-    [orange, red, yellow, white, blue, green],  //17
-    [orange, red, yellow, white, blue, green],  //18
-    [orange, red, yellow, white, blue, green],  //19
-    [orange, red, yellow, white, blue, green],  //20
-    [orange, red, yellow, white, blue, green],  //21
-    [orange, red, yellow, white, blue, green],  //22
-    [orange, red, yellow, white, blue, green],  //23
-    [orange, red, yellow, white, blue, green],  //24
-    [orange, red, yellow, white, blue, green],  //25
-    [orange, red, yellow, white, blue, green],  //26 */
 ];

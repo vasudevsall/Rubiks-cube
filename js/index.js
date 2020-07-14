@@ -42,7 +42,7 @@ function createCube() {
             positionY = -2;
             for(var k=0; k<3; k++){
                 positionY += 1;
-                cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+                cubeGeometry = new THREE.BoxGeometry(.88, .88, .88);
 
                 cubeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, vertexColors: true});
                 cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
@@ -368,6 +368,9 @@ function shuffleCube() {
 function resetCube() {
     cubeState = CUBE_STATE;
     giveFaceColors();
+
+    camera.position.set(-3, 3, 10);
+    controls.update();
 }
 
 function constructor(divId) {
@@ -380,7 +383,7 @@ function constructor(divId) {
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
-    camera.position.set(-3, 4, 10);
+    camera.position.set(-3, 3, 10);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
     renderer.setClearColor(0x2d383a);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);

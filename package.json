@@ -8,14 +8,19 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lite": "lite-server",
     "clean": "rimraf dist",
-    "build": "npm run clean && copyfiles index.html js/* css/* node_modules/three/build/* node_modules/three/examples/jsm/controls/OrbitControls.js favicon.ico dist"
+    "build": "npm run clean && npm run usemin && copyfiles js/* node_modules/three/build/* node_modules/three/examples/jsm/controls/OrbitControls.js favicon.ico dist",
+    "usemin": "usemin index.html -d dist --htmlmin -o dist/index.html"
   },
   "author": "Vasu Dev Sall",
   "license": "ISC",
   "devDependencies": {
     "copyfiles": "^2.3.0",
+    "cssmin": "^0.4.3",
+    "htmlmin": "0.0.7",
     "lite-server": "^2.5.4",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "uglify-js": "^3.10.0",
+    "usemin-cli": "^0.6.0"
   },
   "dependencies": {
     "three": "^0.118.3"

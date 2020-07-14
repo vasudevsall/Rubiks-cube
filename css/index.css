@@ -8,6 +8,12 @@ body {
     background-color: #2d383a;
 }
 
+#button-bottom-div {
+    display: none;
+    position: fixed;
+    bottom: 0;
+}
+
 #canvas-div {
     position: fixed;
     top: 0;
@@ -67,16 +73,13 @@ h4 {
     border: 1px solid white;
 }
 
-#button-bottom-div {
-    display: none;
-}
-
 @media only screen and (max-width: 600px) {
     #info-div {
         display: none;
     }
     #canvas-div {
         width: 100vw;
+        height: calc(100vh - 80px);
     }
     #bottom-button-div {
         display: block;
