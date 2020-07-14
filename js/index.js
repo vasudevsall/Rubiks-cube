@@ -366,6 +366,9 @@ function shuffleCube() {
 }
 
 function resetCube() {
+    /* Clean the rotation queue */
+    rotationQueue.length = 0;
+
     cubeState = CUBE_STATE;
     giveFaceColors();
 
@@ -385,7 +388,7 @@ function constructor(divId) {
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
     camera.position.set(-3, 3, 10);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
-    renderer.setClearColor(0x2d383a);
+    renderer.setClearColor(0x092532);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
 
     /* Adding controls to the scene */
