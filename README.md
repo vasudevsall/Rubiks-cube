@@ -14,3 +14,5 @@ Now fire-up the lite-server using
 
 Now go to your browser and go to the following address:
 ```localhost:3000```
+
+An interactive version of the cube can be found [here](https://rubik-cube.netlify.app/)
