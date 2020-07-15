@@ -56,6 +56,13 @@ body {
     border-left: 5px inset var(--color-back);
 }
 
+#info-div label{
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 10px;
+    color: tomato;
+}
+
 table {
     box-shadow: 5px 5px 5px 0 black;
     border-collapse: collapse;
@@ -72,7 +79,12 @@ td {
 }
 
 h4 {
+    margin-top: 0;
     margin-bottom: 5px;
+}
+
+h4.small-not-visible {
+    margin-top: 20px;
 }
 
 #button-div {
@@ -169,5 +181,11 @@ h4 {
     #personal-div {
         bottom: 100px;
         font-size: 10px;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+    .small-not-visible{
+        display: none;
     }
 }
