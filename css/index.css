@@ -54,6 +54,7 @@ body {
     padding-top: 0;
     z-index: 1;
     border-left: 5px inset var(--color-back);
+    text-align: center;
 }
 
 #info-div label{
@@ -64,23 +65,46 @@ body {
 }
 
 table {
-    box-shadow: 5px 5px 5px 0 black;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
     border-collapse: collapse;
 }
 
-table, th, td {
-    border: 1px solid rgba(255, 255, 255, 0.6);
+th.left, td.left {
+    border-left: none;
+}
+th.right, td.right {
+    border-right: none;
+}
+table {
+    border: none;
+    border-radius: 10px;
 }
 th , td {
+    border: 1px solid rgba(255, 255, 255, 0.6);
     padding: 3px;
 }
 td {
     text-align: center;
 }
+th {
+    border-top: none;
+    background-color: var(--background);
+    color: var(--color-back);
+}
+th.left {
+    border-radius: 10px 0 0 0;   
+}
+th.right{
+    border-radius: 0 10px 0 0;
+}
+th.last, td.last {
+    border-bottom: none;
+}
 
 h4 {
     margin-top: 0;
     margin-bottom: 5px;
+    text-decoration: underline;
 }
 
 h4.small-not-visible {
@@ -109,6 +133,8 @@ h4.small-not-visible {
     cursor: pointer;
     border: 1px solid var(--color-back);
     box-shadow: 2px 2px 5px 1px var(--color-front);
+    border-radius: 10px;
+    margin-right: 2px;
 }
 #button-div button:active, #button-div a:active {
     box-shadow: 0 0 5px 0 var(--color-front);
