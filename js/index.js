@@ -372,8 +372,11 @@ function resetCube() {
     cubeState = CUBE_STATE;
     giveFaceColors();
 
-    camera.position.set(-3, 3, 10);
-    controls.update();
+    controls.reset();
+}
+
+function resetCamera() {
+    controls.reset();
 }
 
 function constructor(divId) {
@@ -386,7 +389,7 @@ function constructor(divId) {
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
-    camera.position.set(-3, 3, 10);
+    camera.position.set(-3, 2, 10);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
     renderer.setClearColor(0x092532);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
@@ -446,6 +449,7 @@ function constructor(divId) {
     /* Add event listeners to buttons */
     document.getElementById('shuffle-button').addEventListener('click', shuffleCube);
     document.getElementById('reset-button').addEventListener('click', resetCube);
+    document.getElementById('reset-camera').addEventListener('click', resetCamera);
 
     // $ Just to help debug the code
     if (debug) {
