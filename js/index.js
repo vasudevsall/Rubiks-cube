@@ -16,6 +16,7 @@ var cubeGroup;
 var vectorX, vectorY, vectorZ;
 
 var frontArr, backArr, rightArr, leftArr, topArr, downArr;
+var rightMid, frontMid, topMid;
 
 /* This variable helps debug */
 var debug = false;
@@ -62,18 +63,24 @@ function createCube() {
                     backArr.push(index);
                 } else if(positionZ === 1) { // front
                     frontArr.push(index);
+                } else { // fontMid
+                    frontMid.push(index);
                 }
 
                 if(positionX === -1) { // left
                     leftArr.push(index);
-                } else if(positionX === 1) {
+                } else if(positionX === 1) { // right
                     rightArr.push(index);
+                } else {    // rightMid
+                    rightMid.push(index);
                 }
 
                 if(positionY === -1) { // down
                     downArr.push(index);
                 } else if(positionY === 1) { // top
                     topArr.push(index);
+                } else { // topMid
+                    topMid.push(index);
                 }
 
                 index = index + 1;
@@ -83,7 +90,7 @@ function createCube() {
 }
 
 function rotate(sideArr, rev = true) {
-    var retArray = new Array();
+    var retArray = [];
     retArray.push(sideArr[2]);
     retArray.push(sideArr[5]);
     retArray.push(sideArr[8]);
@@ -101,50 +108,56 @@ function rotate(sideArr, rev = true) {
 }
 
 /* Function for both right and left rotation */
-function rightRotation(left, rev) {
+function rightRotation(left, rev, double = 1) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
-
-    var finalArr;
     var tempState = [];
-
-    var initArr = (left)? leftArr:rightArr;
-    
-    finalArr = rotate(initArr);
 
     for (var i=0; i<cubeState.length; i++){
         tempState[i] = cubeState[i].slice();
     }
-    if( (!left && !rev) || (left && rev)) {
-        finalArr.reverse();
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][0];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][1];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][5];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][3];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][2];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+    for(let d=0; d<double; d++) {
+        var finalArr;
+        var initArr = (left)? leftArr:rightArr;
+        if(d === 1) {
+            initArr = rightMid;
+        } else if(d == 2) {
+            initArr = (left)? rightArr:leftArr;
         }
-        rotationCoeff = -0.1;
-    } else {
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][0];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][1];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][5];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][2];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][3];
+        
+        finalArr = rotate(initArr);
+        if( (!left && !rev) || (left && rev)) {
+            finalArr.reverse();
+            for(var i = 0; i<finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][0];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][1];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][5];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][3];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][2];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = -0.1;
+        } else {
+            for(var i = 0; i<finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][0];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][1];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][5];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][2];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][3];
+
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = 0.1;
         }
-        rotationCoeff = 0.1;
     }
 
 
@@ -156,50 +169,59 @@ function rightRotation(left, rev) {
 }
 
 /* Function for both front and back rotations */
-function frontRotation(back, rev) {
+function frontRotation(back, rev, double = 1) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
 
-    var finalArr;
     var tempState = [];
-    
-    var initArr = (back)? backArr:frontArr;
 
-    finalArr = rotate(initArr);
-
-    for (var i=0; i<cubeState.length; i++){
+    for (let i=0; i<cubeState.length; i++){
         tempState[i] = cubeState[i].slice();
     }
-    if((!back && !rev) || (back && rev)) {
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][2];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][3];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][1];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][0];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][5];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+    for(let d = 0; d < double; d++) {
+        var finalArr;
+        var initArr = (back) ? backArr : frontArr;
+        if(d === 1) {
+            initArr = frontMid;
+        } else if(d == 2) {
+            initArr = (back)? frontArr:backArr;
         }
-        rotationCoeff = -0.1;
-    } else {
-        finalArr.reverse();
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][3];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][2];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][0];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][1];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][5];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+        finalArr = rotate(initArr);
+
+
+        if ((!back && !rev) || (back && rev)) {
+            for (let i = 0; i < finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][2];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][3];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][1];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][0];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][5];
+
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = -0.1;
+        } else {
+            finalArr.reverse();
+            for (let i = 0; i < finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][3];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][2];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][0];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][1];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][5];
+
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = 0.1;
         }
-        rotationCoeff = 0.1;
     }
 
 
@@ -210,50 +232,59 @@ function frontRotation(back, rev) {
 }
 
 /* Function for handling both top and down rotations */
-function topRotation(down, rev) {
+function topRotation(down, rev, double = 1) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
 
-    var finalArr;
     var tempState = [];
-    
-    var initArr = (down)? downArr:topArr;
 
-    finalArr = rotate(initArr);
 
-    for (var i=0; i<cubeState.length; i++){
+    for (let i=0; i<cubeState.length; i++){
         tempState[i] = cubeState[i].slice();
     }
-    if((!down && !rev) || (down && rev)) {
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][5];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][0];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][1];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+    for(let d=0; d<double; d++) {
+        var finalArr;
+        var initArr = (down) ? downArr : topArr;
+        if(d === 1) {
+            initArr = topMid;
+        } else if(d == 2) {
+            initArr = (down)? topArr:downArr;
         }
-        rotationCoeff = -0.1;
-    } else {
-        finalArr.reverse();
-        for(var i = 0; i<finalArr.length; i++) {
-            tempState[initArr[i]][0] = cubeState[finalArr[i]][4];
-            tempState[initArr[i]][1] = cubeState[finalArr[i]][5];
-            tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
-            tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
-            tempState[initArr[i]][4] = cubeState[finalArr[i]][1];
-            tempState[initArr[i]][5] = cubeState[finalArr[i]][0];
 
-            /* Add to group */
-            cubeGroup.add(cubeArray[initArr[i]]);
-            cubeGroup.add(cubeBorderArray[initArr[i]]);
+        finalArr = rotate(initArr);
+
+        if ((!down && !rev) || (down && rev)) {
+            for (let i = 0; i < finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][5];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][0];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][1];
+
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = -0.1;
+        } else {
+            finalArr.reverse();
+            for (let i = 0; i < finalArr.length; i++) {
+                tempState[initArr[i]][0] = cubeState[finalArr[i]][4];
+                tempState[initArr[i]][1] = cubeState[finalArr[i]][5];
+                tempState[initArr[i]][2] = cubeState[finalArr[i]][2];
+                tempState[initArr[i]][3] = cubeState[finalArr[i]][3];
+                tempState[initArr[i]][4] = cubeState[finalArr[i]][1];
+                tempState[initArr[i]][5] = cubeState[finalArr[i]][0];
+
+                /* Add to group */
+                cubeGroup.add(cubeArray[initArr[i]]);
+                cubeGroup.add(cubeBorderArray[initArr[i]]);
+            }
+            rotationCoeff = 0.1;
         }
-        rotationCoeff = 0.1;
     }
 
 
@@ -389,7 +420,7 @@ function constructor(divId) {
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
-    camera.position.set(-3, 2, 10);
+    camera.position.set(4, 4, 10);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
     renderer.setClearColor(0x092532);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
@@ -425,6 +456,10 @@ function constructor(divId) {
     leftArr = [];
     topArr = [];
     downArr = [];
+    // Double rotations
+    rightMid = [];
+    frontMid = [];
+    topMid = [];
 
     /* Initialize the cubeGroup and add it to the scene */
     cubeGroup = new THREE.Group();
@@ -469,6 +504,42 @@ function nextRotation() {
     var next = rotationQueue.shift();
 
     switch(next) {
+        case -23:   // z prime rotation
+            return (function() {
+                frontRotation(false, true, 3);
+            });
+        case -22:    // y prime rotation
+            return (function() {
+                topRotation(false, true, 3);
+            });
+        case -21:   // x prime rotation
+            return (function() {
+                rightRotation(false, true, 3);
+            });
+        case -16:    // Back Prime double
+            return (function() {
+                frontRotation(true, true, 2);
+            });
+        case -15:    // Front Prime double
+            return (function(){
+                frontRotation(false, true, 2);
+            });
+        case -14:    // Bottom Prime double
+            return (function(){
+                topRotation(true, true, 2);
+            });
+        case -13:    // Top Prime double
+            return (function() {
+                topRotation(false, true, 2);
+            });
+        case -12:    // Left Prime double
+            return (function(){
+                rightRotation(true, true, 2);
+            });
+        case -11:    // Right Prime double
+            return (function(){
+                rightRotation(false, true, 2);
+            });
         case -6:    // Back Prime
             return (function() {
                 frontRotation(true, true);
@@ -516,6 +587,42 @@ function nextRotation() {
         case 6:     // Back
             return (function() {
                 frontRotation(true, false);
+            });
+        case 11:     // Right double
+            return (function(){
+                rightRotation(false, false, 2);
+            });
+        case 12:     // Left double
+            return (function(){
+                rightRotation(true, false, 2);
+            });
+        case 13:     // Top double
+            return (function(){
+                topRotation(false, false, 2);
+            });
+        case 14:     // Bottom double
+            return (function(){
+                topRotation(true, false, 2);
+            });
+        case 15:     // Front double
+            return (function(){
+                frontRotation(false, false, 2);
+            });
+        case 16:     // Back double
+            return (function() {
+                frontRotation(true, false, 2);
+            });
+        case 21:    // x Rotation
+            return (function() {
+                rightRotation(false, false, 3);
+            });
+        case 22:    // y Rotation
+            return (function() {
+                topRotation(false, false, 3);
+            });
+        case 23:    // z Rotation
+            return (function () {
+                frontRotation(false, false, 3);
             });
         default:
             return null;
