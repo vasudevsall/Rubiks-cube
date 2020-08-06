@@ -1,11 +1,10 @@
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import { CUBE_STATE } from './cubeState.js';
 
 var canvasDiv, canvasDivStyle;
 var TH_HEIGHT, TH_WIDTH;
 
 var scene, camera, renderer;
-var controls;
+var light;
 
 var cubeGeometry, cubeMaterial, cubeBorderGeometry ,cube, cubeBorder;
 var cubeArray = [];
@@ -402,12 +401,6 @@ function resetCube() {
 
     cubeState = CUBE_STATE;
     giveFaceColors();
-
-    controls.reset();
-}
-
-function resetCamera() {
-    controls.reset();
 }
 
 function constructor(divId) {
@@ -421,15 +414,24 @@ function constructor(divId) {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
     camera.position.set(4, 4, 10);
+    camera.lookAt(0, 0, 0);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
     renderer.setClearColor(0x092532);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
-
-    /* Adding controls to the scene */
-    controls = new OrbitControls( camera, canvasDiv);
+    renderer.shadowMap.enabled = true;
 
     /* Adding Light to the Scene */
-    scene.add(new THREE.AmbientLight(0xffffff));
+    // scene.add(new THREE.AmbientLight(0xffffff));
+    light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(40, 40, 40);
+    scene.add(light);
+
+    light = new THREE.DirectionalLight(0xffffff, 0.46);
+    light.position.set(8, 30, 8);
+    light.castShadow = true;
+    light.shadow.radius = 13;
+    light.shadow.normalBias = -2;
+    scene.add(light);
 
     // $ If debug is true, then add axis to help
     if(debug) {
@@ -484,7 +486,6 @@ function constructor(divId) {
     /* Add event listeners to buttons */
     document.getElementById('shuffle-button').addEventListener('click', shuffleCube);
     document.getElementById('reset-button').addEventListener('click', resetCube);
-    document.getElementById('reset-camera').addEventListener('click', resetCamera);
 
     // $ Just to help debug the code
     if (debug) {
@@ -649,8 +650,6 @@ function render() {
         rotationVar = 0.0;
     }
 
-    /* Orbit Controls update and rendering camera  */
-    controls.update();
     renderer.render(scene, camera);
 }
 
