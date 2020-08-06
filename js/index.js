@@ -1,10 +1,12 @@
 import { CUBE_STATE } from './cubeState.js';
+import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js'
 
 var canvasDiv, canvasDivStyle;
 var TH_HEIGHT, TH_WIDTH;
 
 var scene, camera, renderer;
 var light;
+var controls;
 
 var cubeGeometry, cubeMaterial, cubeBorderGeometry ,cube, cubeBorder;
 var cubeArray = [];
@@ -420,10 +422,22 @@ function constructor(divId) {
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
     renderer.shadowMap.enabled = true;
 
+    /* Adding Orbit Controls to the scene */
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.addEventListener('end', function(){
+        controls.reset();
+    });
+
     /* Adding Light to the Scene */
     // scene.add(new THREE.AmbientLight(0xffffff));
     light = new THREE.DirectionalLight(0xffffff);
     light.position.set(40, 40, 40);
+    light.intensity = 1.5;
+    scene.add(light);
+
+    light = new THREE.DirectionalLight(0xffffff);
+    light.position.set(-40, -40, -40);
+    light.intensity = 2;
     scene.add(light);
 
     light = new THREE.DirectionalLight(0xffffff, 0.46);
@@ -649,6 +663,9 @@ function render() {
             }
         rotationVar = 0.0;
     }
+
+    /*Controls Update */
+    controls.update();
 
     renderer.render(scene, camera);
 }
