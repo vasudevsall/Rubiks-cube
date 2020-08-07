@@ -1,16 +1,14 @@
 import { CUBE_STATE } from './cubeState.js';
-import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from '../node_modules/three/examples/jsm/controls/OrbitControls.js';
 
 var canvasDiv, canvasDivStyle;
 var TH_HEIGHT, TH_WIDTH;
 
 var scene, camera, renderer;
-var light;
 var controls;
 
-var cubeGeometry, cubeMaterial, cubeBorderGeometry ,cube, cubeBorder;
+var cubeGeometry, cubeMaterial,cube;
 var cubeArray = [];
-var cubeBorderArray = [];
 var cubeState = CUBE_STATE;
 
 var cubeGroup;
@@ -27,58 +25,154 @@ var doRotation = false, rotationVar = 0, rotationVector, rotationCoeff;
 var rotationQueue = []; //[1, 2, 3, 4, 5, 6, -6, -5, -4, -3, -2, -1];
 // 0 -> no rotation, 1 -> right, 2-> left, 3-> top, 4-> bottom, 5-> front, 6-> back
 // -1 -> rightPrime, -2-> leftPrime, -3->topPrime, etc.
+var faceIndexArr = [98, 198, 200, 202, 96, 196];
+
+function RoundEdgedBox(width, height, depth, radius, widthSegments, heightSegments, depthSegments, smoothness) {
+
+    width = width || 1;
+    height = height || 1;
+    depth = depth || 1;
+    radius = radius || (Math.min(Math.min(width, height), depth) * .25);
+    widthSegments = Math.floor(widthSegments) || 1;
+    heightSegments = Math.floor(heightSegments) || 1;
+    depthSegments = Math.floor(depthSegments) || 1;
+    smoothness = Math.max(3, Math.floor(smoothness) || 3);
+
+    let halfWidth = width * .5 - radius;
+    let halfHeight = height * .5 - radius;
+    let halfDepth = depth * .5 - radius;
+
+    var geometry = new THREE.Geometry();
+
+    var corner1 = new THREE.SphereGeometry(radius, smoothness, smoothness, 0, Math.PI * .5, 0, Math.PI * .5);
+    corner1.translate(-halfWidth, halfHeight, halfDepth);
+    var corner2 = new THREE.SphereGeometry(radius, smoothness, smoothness, Math.PI * .5, Math.PI * .5, 0, Math.PI * .5);
+    corner2.translate(halfWidth, halfHeight, halfDepth);
+    var corner3 = new THREE.SphereGeometry(radius, smoothness, smoothness, 0, Math.PI * .5, Math.PI * .5, Math.PI * .5);
+    corner3.translate(-halfWidth, -halfHeight, halfDepth);
+    var corner4 = new THREE.SphereGeometry(radius, smoothness, smoothness, Math.PI * .5, Math.PI * .5, Math.PI * .5, Math.PI * .5);
+    corner4.translate(halfWidth, -halfHeight, halfDepth);
+    
+    geometry.merge(corner1);
+    geometry.merge(corner2);
+    geometry.merge(corner3);
+    geometry.merge(corner4);
+
+    var edge = new THREE.CylinderGeometry(radius, radius, width - radius * 2, smoothness, widthSegments, true, 0, Math.PI * .5);
+    edge.rotateZ(Math.PI * .5);
+    edge.translate(0, halfHeight, halfDepth);
+    var edge2 = new THREE.CylinderGeometry(radius, radius, width - radius * 2, smoothness, widthSegments, true, Math.PI * 1.5, Math.PI * .5);
+    edge2.rotateZ(Math.PI * .5);
+    edge2.translate(0, -halfHeight, halfDepth);
+
+    // height
+    var edge3 = new THREE.CylinderGeometry(radius, radius, height - radius * 2, smoothness, heightSegments, true, 0, Math.PI * .5);
+    edge3.translate(halfWidth, 0, halfDepth);
+    var edge4 = new THREE.CylinderGeometry(radius, radius, height - radius * 2, smoothness, heightSegments, true, Math.PI * 1.5, Math.PI * .5);
+    edge4.translate(-halfWidth, 0, halfDepth);
+
+    // depth
+    var edge5 = new THREE.CylinderGeometry(radius, radius, depth - radius * 2, smoothness, depthSegments, true, 0, Math.PI * .5);
+    edge5.rotateX(-Math.PI * .5);
+    edge5.translate(halfWidth, halfHeight, 0);
+    var edge6 = new THREE.CylinderGeometry(radius, radius, depth - radius * 2, smoothness, depthSegments, true, Math.PI * .5, Math.PI * .5);
+    edge6.rotateX(-Math.PI * .5);
+    edge6.translate(halfWidth, -halfHeight, 0);
+
+    edge.merge(edge2);
+    edge.merge(edge3);
+    edge.merge(edge4);
+    edge.merge(edge5);
+    edge.merge(edge6);
+
+    // sides
+    // front
+    var side = new THREE.PlaneGeometry(width - radius * 2, height - radius * 2, widthSegments, heightSegments);
+    side.translate(0, 0, depth * .5);
+
+    // right
+    var side2 = new THREE.PlaneGeometry(depth - radius * 2, height - radius * 2, depthSegments, heightSegments);
+    side2.rotateY(Math.PI * .5);
+    side2.translate(width * .5, 0, 0);
+
+    side.merge(side2);
+
+    geometry.merge(edge);
+    geometry.merge(side);
+
+    // duplicate and flip
+    var secondHalf = geometry.clone();
+    secondHalf.rotateY(Math.PI);
+    geometry.merge(secondHalf);
+
+    // top
+    var top = new THREE.PlaneGeometry(width - radius * 2, depth - radius * 2, widthSegments, depthSegments);
+    top.rotateX(-Math.PI * .5);
+    top.translate(0, height * .5, 0);
+
+    // bottom
+    var bottom = new THREE.PlaneGeometry(width - radius * 2, depth - radius * 2, widthSegments, depthSegments);
+    bottom.rotateX(Math.PI * .5);
+    bottom.translate(0, -height * .5, 0);
+
+    geometry.merge(top);
+    geometry.merge(bottom);
+
+    geometry.mergeVertices();
+
+    return geometry;
+  }
 
 function createCube() {
     /* Create cube */
 
-    var positionX = -2;
-    var positionY = -2;
-    var positionZ = -2;
+    var positionX = -20;
+    var positionY = -20;
+    var positionZ = -20;
     var index = 0;
 
     for(var i=0; i<3; i++) {
-        positionX = -2;
-        positionZ += 1;
+        positionX = -20;
+        positionZ += 10;
         for(var j=0; j<3; j++) {
-            positionX += 1;
-            positionY = -2;
+            positionX += 10;
+            positionY = -20;
             for(var k=0; k<3; k++){
-                positionY += 1;
-                cubeGeometry = new THREE.BoxGeometry(.88, .88, .88);
+                positionY += 10;
+                // cubeGeometry = new THREE.BoxGeometry(.88, .88, .88);
+                cubeGeometry = RoundEdgedBox(10, 10, 10, 1, 1, 1, 1, 1);
+                var faces = cubeGeometry.faces;
+                for(var x = 0; x<faces.length; x++) {
+                    faces[x].color.setHex(0x000000);
+                }
 
                 cubeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, vertexColors: true});
                 cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
                 cube.position.set(positionX, positionY, positionZ);
                 scene.add(cube);
 
-                cubeBorderGeometry = new THREE.EdgesGeometry( cube.geometry );
-                cubeBorder = new THREE.LineSegments(cubeBorderGeometry, new THREE.LineBasicMaterial({color: 0x0000, linewidth: 3}));
-                cubeBorder.position.set(positionX, positionY, positionZ);
-                scene.add(cubeBorder);
-
                 cubeArray.push(cube);
-                cubeBorderArray.push(cubeBorder);
 
                 /* Pushing the index to the required Array */
-                if(positionZ === -1) { // back
+                if(positionZ === -10) { // back
                     backArr.push(index);
-                } else if(positionZ === 1) { // front
+                } else if(positionZ === 10) { // front
                     frontArr.push(index);
                 } else { // fontMid
                     frontMid.push(index);
                 }
 
-                if(positionX === -1) { // left
+                if(positionX === -10) { // left
                     leftArr.push(index);
-                } else if(positionX === 1) { // right
+                } else if(positionX === 10) { // right
                     rightArr.push(index);
                 } else {    // rightMid
                     rightMid.push(index);
                 }
 
-                if(positionY === -1) { // down
+                if(positionY === -10) { // down
                     downArr.push(index);
-                } else if(positionY === 1) { // top
+                } else if(positionY === 10) { // top
                     topArr.push(index);
                 } else { // topMid
                     topMid.push(index);
@@ -141,7 +235,6 @@ function rightRotation(left, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = -0.1;
         } else {
@@ -155,7 +248,6 @@ function rightRotation(left, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = 0.1;
         }
@@ -204,7 +296,6 @@ function frontRotation(back, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = -0.1;
         } else {
@@ -219,7 +310,6 @@ function frontRotation(back, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = 0.1;
         }
@@ -267,7 +357,6 @@ function topRotation(down, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = -0.1;
         } else {
@@ -282,7 +371,6 @@ function topRotation(down, rev, double = 1) {
 
                 /* Add to group */
                 cubeGroup.add(cubeArray[initArr[i]]);
-                cubeGroup.add(cubeBorderArray[initArr[i]]);
             }
             rotationCoeff = 0.1;
         }
@@ -301,8 +389,8 @@ function giveFaceColors() {
         var faces = thisCube.geometry.faces;
 
         for(var x=0; x<6; x++) {
-            faces[2*x].color.setHex(cubeState[i][x]);
-            faces[2*x+1].color.setHex(cubeState[i][x]);
+            faces[faceIndexArr[x]].color.setHex(cubeState[i][x]);
+            faces[faceIndexArr[x] + 1].color.setHex(cubeState[i][x]);
         }
 
         thisCube.geometry.elementsNeedUpdate = true;
@@ -415,7 +503,7 @@ function constructor(divId) {
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
-    camera.position.set(4, 4, 10);
+    camera.position.set(-50, 30, 100);
     camera.lookAt(0, 0, 0);
     renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
     renderer.setClearColor(0x092532);
@@ -429,27 +517,11 @@ function constructor(divId) {
     });
 
     /* Adding Light to the Scene */
-    // scene.add(new THREE.AmbientLight(0xffffff));
-    light = new THREE.DirectionalLight(0xffffff);
-    light.position.set(40, 40, 40);
-    light.intensity = 1.5;
-    scene.add(light);
-
-    light = new THREE.DirectionalLight(0xffffff);
-    light.position.set(-40, -40, -40);
-    light.intensity = 2;
-    scene.add(light);
-
-    light = new THREE.DirectionalLight(0xffffff, 0.46);
-    light.position.set(8, 30, 8);
-    light.castShadow = true;
-    light.shadow.radius = 13;
-    light.shadow.normalBias = -2;
-    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff));
 
     // $ If debug is true, then add axis to help
     if(debug) {
-        scene.add(new THREE.AxesHelper(10));
+        scene.add(new THREE.AxesHelper(200));
     }
 
     // * Adding three vectirs to support
@@ -460,9 +532,9 @@ function constructor(divId) {
     // $ If debug is true add Vector Helpers
     if(debug) {
         var origin = new THREE.Vector3(0, 0, 0);
-        scene.add(new THREE.ArrowHelper( vectorX, origin, 10, 0xffcc33));
-        scene.add(new THREE.ArrowHelper( vectorY, origin, 10, 0xff00cc));
-        scene.add(new THREE.ArrowHelper( vectorZ, origin, 10, 0x2243b6));
+        scene.add(new THREE.ArrowHelper( vectorX, origin, 150, 0xff0000));
+        scene.add(new THREE.ArrowHelper( vectorY, origin, 150, 0x00ff00));
+        scene.add(new THREE.ArrowHelper( vectorZ, origin, 150, 0x0000ff));
     }
 
     /* Initializing all the arrays */
