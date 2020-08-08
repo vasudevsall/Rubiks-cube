@@ -24,7 +24,8 @@ body {
 canvas {
     background-attachment: fixed;
     background-color: #111111;
-    background-image: radial-gradient( circle farthest-corner at -4% -12.9%,  #555555aa 0.3%, #111111 90.2% );
+    /* background-image: radial-gradient( circle farthest-corner at -4% -12.9%,  #555555aa 0.3%, #111111 99.2% ); */
+    background-image: linear-gradient( 45deg,  #555555aa 0.3%, #111111 99.8% );
 }
 
 #bottom-button-div {
