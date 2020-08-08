@@ -408,6 +408,39 @@ function windowKeyPress(event, btn = false) {
 
     var toPush;
     switch(toSwitch) {
+        case 33:    // front double prime (!)
+            toPush = -15;
+            break;
+        case 35:    // right double prime (#)
+            toPush = -11;
+            break;
+        case 36:    // left double prime ($)
+            toPush = -12;
+            break;
+        case 37:    // top double prime (%)
+            toPush = -13;
+            break;
+        case 49:    // front double (1)
+            toPush = 15;
+            break;
+        case 50:    // back double (2)
+            toPush = 16;
+            break;
+        case 51: // right double (3)
+            toPush = 11;
+            break;
+        case 52: // left double (4)
+            toPush = 12;
+            break;
+        case 53: // top double (5)
+            toPush = 13;
+            break;
+        case 54:    // down double (6)
+            toPush = 14;
+            break;
+        case 64:    // back double prime (@)
+            toPush = -16;
+            break;
         case 66:    // back Prime (Shift + b = B)
             toPush = -6;
             break;
@@ -426,6 +459,18 @@ function windowKeyPress(event, btn = false) {
         case 85:    // top Prime (Shift + u = U)
             toPush = -3;
             break;
+        case 88:    // x Prime (Shift + x = X)
+            toPush = -21;
+            break;
+        case 89:    // y Prime (Shift + y = Y)
+            toPush = -22;
+            break;
+        case 90:    // z Prime (Shift + z = Z)
+            toPush = -23;
+            break;
+        case 94:    // down double prime (^)
+            toPush = -14;
+            break;
         case 98:    // back (b)
             toPush = 6;
             break;
@@ -443,6 +488,15 @@ function windowKeyPress(event, btn = false) {
             break;
         case 117:   // top (u)
             toPush = 3;
+            break;
+        case 120:    // x
+            toPush = 21;
+            break;
+        case 121:    // y 
+            toPush = 22;
+            break;
+        case 122:    // z
+            toPush = 23;
             break;
         default:
             toPush = 0;

@@ -18,8 +18,18 @@
     <div id="canvas-div">
     </div>
     <div id="info-div">
-        <h4>Legend</h4>
-        <table>
+        <div class="text-center">
+            <h4>Legend</h4>
+        </div>
+        <input type="radio" checked id="radio-1" name="select-table"/>
+        <label class="radio-labels" for="radio-1">Basic Moves</label><br/>
+
+        <input type="radio" id="radio-2" name="select-table"/>
+        <label class="radio-labels" for="radio-2">Cube Reorientation</label><br/>
+
+        <input type="radio" id="radio-3" name="select-table"/>
+        <label class="radio-labels" for="radio-3">Two Layers</label><br/>
+        <table id='table-1'>
             <tr>
                 <th class="left">Key*</th>
                 <th class="right">Face</th>
@@ -73,7 +83,118 @@
                 <td class="right last">Bottom Prime</td>
             </tr>
         </table>
-        <label>*Press these keys on keyboard</label>
+        <table id="table-2">
+            <tr>
+                <th class="left">Key*</th>
+                <th class="right">Rotation Axis</th>
+            </tr>
+            <tr>
+                <td class="left">x</td>
+                <td class="right">
+                    X<br/> (Clockwise)
+                </td>
+            </tr>
+            <tr>
+                <td class="left">y</td>
+                <td class="right">Y</td>
+            </tr>
+            <tr>
+                <td class="left">z</td>
+                <td class="right">Z</td>
+            </tr>
+            <tr>
+                <td class="left">X</td>
+                <td class="right">
+                    -X<br/> (Counter-C)
+                </td>
+            </tr>
+            <tr>
+                <td class="left">Y</td>
+                <td class="right">
+                    -Y
+                </td>
+            </tr>
+            <tr>
+                <td class="left last">Z</td>
+                <td class="right last">
+                    -Z
+                </td>
+            </tr>
+        </table>
+
+        <table id="table-3">
+            <tr>
+                <th class="left">Key*</th>
+                <th class="right">Face</th>
+            </tr>
+            <tr>
+                <td class="left">1</td>
+                <td class="right">
+                    front
+                </td>
+            </tr>
+            <tr>
+                <td class="left">2</td>
+                <td class="right">back</td>
+            </tr>
+            <tr>
+                <td class="left">3</td>
+                <td class="right">right</td>
+            </tr>
+            <tr>
+                <td class="left">4</td>
+                <td class="right">
+                    left
+                </td>
+            </tr>
+            <tr>
+                <td class="left">5</td>
+                <td class="right">
+                    top
+                </td>
+            </tr>
+            <tr>
+                <td class="left">6</td>
+                <td class="right">
+                    bottom
+                </td>
+            </tr>
+            <tr>
+                <td class="left">!</td>
+                <td class="right">
+                    front prime
+                </td>
+            </tr>
+            <tr>
+                <td class="left">@</td>
+                <td class="right">back prime</td>
+            </tr>
+            <tr>
+                <td class="left">#</td>
+                <td class="right">right prime</td>
+            </tr>
+            <tr>
+                <td class="left">$</td>
+                <td class="right">
+                    left prime
+                </td>
+            </tr>
+            <tr>
+                <td class="left">%</td>
+                <td class="right">
+                    top prime
+                </td>
+            </tr>
+            <tr>
+                <td class="left last">&</td>
+                <td class="right last">
+                    bottom prime
+                </td>
+            </tr>
+        </table>
+        <div class="text-center">
+            <label>*Press these keys on keyboard</label>
+        </div>
     </div>
     <div id="personal-div">
         <p>Built by: <a href="https://www.linkedin.com/in/vasu-dev-sall-181b94179/">Vasu Dev Sall</a></p>
