@@ -4,7 +4,7 @@ var yellow = 0xffff00;
 var white = 0xffffff;
 var blue = 0x0000ff;
 var green = 0x00ff00;
-var black = 0x000000;
+var black = 0x101010;
 
 export const CUBE_STATE = [
     // 0xffa500,    // $ Orange -> right

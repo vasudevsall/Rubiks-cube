@@ -143,7 +143,7 @@ function createCube() {
                 cubeGeometry = RoundEdgedBox(10, 10, 10, 1, 1, 1, 1, 1);
                 var faces = cubeGeometry.faces;
                 for(var x = 0; x<faces.length; x++) {
-                    faces[x].color.setHex(0x000000);
+                    faces[x].color.setHex(0x101010);
                 }
 
                 cubeMaterial = new THREE.MeshLambertMaterial({color: 0xffffff, vertexColors: true});
@@ -502,16 +502,20 @@ function constructor(divId) {
     
     /* Setting up scene, camera and renderer*/
     scene = new THREE.Scene();
+    scene.background = null;
     camera = new THREE.PerspectiveCamera(45, TH_WIDTH/TH_HEIGHT, 0.1, 500);
     camera.position.set(-50, 30, 100);
     camera.lookAt(0, 0, 0);
-    renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp'});
-    renderer.setClearColor(0x092532);
+    renderer = new THREE.WebGLRenderer({antialias: true, precision: 'highp', alpha: true});
+    // renderer.setClearColor(0x263f44);
+    renderer.setClearColor(0xe4e3e3, 0);
     renderer.setSize(TH_WIDTH, TH_HEIGHT);
     renderer.shadowMap.enabled = true;
 
     /* Adding Orbit Controls to the scene */
     controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan =false;
+    controls.enableZoom = false;
     controls.addEventListener('end', function(){
         controls.reset();
     });
