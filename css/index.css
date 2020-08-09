@@ -225,6 +225,7 @@ h4.small-not-visible {
     transform: scale(1);
     transition: transform 0.5s;
     position: relative;
+    text-align: center;
 }
 .carousel a {
     display: inline-flex;
@@ -249,29 +250,34 @@ h4.small-not-visible {
     }
     #canvas-div {
         width: 100vw;
-        height: calc(100vh - 210px);
+        height: calc(100vh - 190px);
     }
     #bottom-button-div {
         display: block;
         position: fixed;
-        height: 130px;
+        height: 110px;
         width: 100vw;
         background-color: var(--color-back);
         bottom: 0;
-        padding: 10px;
+        padding: 10px 0;
         border-top: 5px inset var(--color-back);
     }
     #bottom-button-div button {
-        display: inline-block;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
         margin: 5px;
         background-color: var(--color-front);
         color: var(--color-back);
         padding: 8px;
+        height: 30px;
+        width: 30px;
         font-family: 'Montserrat', sans-serif;
         text-decoration: none;
         cursor: pointer;
-        border: 1px solid var(--color-back);
-        box-shadow: 2px 2px 5px 1px var(--color-front);
+        border-radius: 5px;
+        border: 1px ridge var(--color-back);
+        box-shadow: 2px 2px 3px 0 #000;
     }
     .big-screen-anchor{
         display: none;
@@ -281,7 +287,7 @@ h4.small-not-visible {
     }
 
     #personal-div {
-        bottom: 100px;
+        bottom: 130px;
         font-size: 10px;
     }
 }
