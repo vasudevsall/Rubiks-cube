@@ -203,7 +203,7 @@ function rotate(sideArr, rev = true) {
 }
 
 /* Function for both right and left rotation */
-function rightRotation(left, rev, double = 1) {
+function rightRotation(left, rev, double = 1, initD = 0) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
@@ -213,7 +213,7 @@ function rightRotation(left, rev, double = 1) {
         tempState[i] = cubeState[i].slice();
     }
 
-    for(let d=0; d<double; d++) {
+    for(let d=initD; d<double; d++) {
         var finalArr;
         var initArr = (left)? leftArr:rightArr;
         if(d === 1) {
@@ -262,7 +262,7 @@ function rightRotation(left, rev, double = 1) {
 }
 
 /* Function for both front and back rotations */
-function frontRotation(back, rev, double = 1) {
+function frontRotation(back, rev, double = 1, initD = 0) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
@@ -273,7 +273,7 @@ function frontRotation(back, rev, double = 1) {
         tempState[i] = cubeState[i].slice();
     }
 
-    for(let d = 0; d < double; d++) {
+    for(let d = initD; d < double; d++) {
         var finalArr;
         var initArr = (back) ? backArr : frontArr;
         if(d === 1) {
@@ -323,7 +323,7 @@ function frontRotation(back, rev, double = 1) {
 }
 
 /* Function for handling both top and down rotations */
-function topRotation(down, rev, double = 1) {
+function topRotation(down, rev, double = 1, initD = 0) {
 
     /* Initialize a new Group */
     cubeGroup = new THREE.Group();
@@ -335,7 +335,7 @@ function topRotation(down, rev, double = 1) {
         tempState[i] = cubeState[i].slice();
     }
 
-    for(let d=0; d<double; d++) {
+    for(let d=initD; d<double; d++) {
         var finalArr;
         var initArr = (down) ? downArr : topArr;
         if(d === 1) {
@@ -447,14 +447,23 @@ function windowKeyPress(event, btn = false) {
         case 68:    // down Prime (Shift + d = D)
             toPush = -4;
             break;
+        case 69:    // Top Middle Prime (Shift + e = E)
+            toPush = -8;
+            break;
         case 70:    // front Prime (Shift + f = F)
             toPush = -5;
             break;
         case 76:    // left Prime (Shift + l = L)
             toPush = -2;
             break;
+        case 77: // middle right Prime (shift + m = M)
+            toPush = -7;
+            break;
         case 82:    // right Prime (Shift + r = R)
             toPush = -1;
+            break;
+        case 83:    // Front Middle Prime (Shift + s = S)
+            toPush = -9;
             break;
         case 85:    // top Prime (Shift + u = U)
             toPush = -3;
@@ -477,14 +486,23 @@ function windowKeyPress(event, btn = false) {
         case 100:   // down (d)
             toPush = 4;
             break;
+        case 101:   // Top Middle (e)
+            toPush = 8;
+            break;
         case 102:   // front (f)
             toPush = 5;
             break;
         case 108:   // left (l)
             toPush = 2;
             break;
+        case 109:   // middle (m)
+            toPush = 7;
+            break;
         case 114:   // right (r)
             toPush = 1;
+            break;
+        case 115:   // Front Middle (s)
+            toPush = 9;
             break;
         case 117:   // top (u)
             toPush = 3;
@@ -685,6 +703,18 @@ function nextRotation() {
             return (function(){
                 rightRotation(false, true, 2);
             });
+        case -9:    // Front Middle Prime
+            return (function() {
+                frontRotation(false, true, 2, 1);
+            });
+        case -8:    // Top Middle Prime
+            return (function() {
+                topRotation(false, true, 2, 1);
+            });
+        case -7:    // Right Middle Prime
+            return (function() {
+                rightRotation(false, true, 2, 1);
+            });
         case -6:    // Back Prime
             return (function() {
                 frontRotation(true, true);
@@ -732,6 +762,18 @@ function nextRotation() {
         case 6:     // Back
             return (function() {
                 frontRotation(true, false);
+            });
+        case 7:     // Right Middle
+            return (function(){
+                rightRotation(false, false, 2, 1);
+            });
+        case 8:     // Top Middle
+            return (function(){
+                topRotation(false, false, 2, 1);
+            });
+        case 9:     // Front Middle
+            return (function(){
+                frontRotation(false, false, 2, 1);
             });
         case 11:     // Right double
             return (function(){
