@@ -23,6 +23,6 @@
     "usemin-cli": "^0.6.0"
   },
   "dependencies": {
-    "three": "^0.118.3"
+    "three": "^0.125.0"
   }
 }
