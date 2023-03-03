@@ -17,7 +17,7 @@
     "copyfiles": "^2.3.0",
     "cssmin": "^0.4.3",
     "htmlmin": "0.0.7",
-    "lite-server": "^2.5.4",
+    "lite-server": "^2.6.1",
     "rimraf": "^3.0.2",
     "uglify-js": "^3.10.0",
     "usemin-cli": "^0.6.0"
